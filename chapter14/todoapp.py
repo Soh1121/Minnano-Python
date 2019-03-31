@@ -41,3 +41,17 @@ class ToDoApp(Frame):
         self.listbox.bind("<ButtonRelease-1>", self.selsectitem)
 
         self.frame1.grid(row = 0, column = 0)
+
+    def setlistitems(self):
+        """
+        ToDoのうち未消化分をリストに表示する
+        """
+        self.listbox.delete(0, END)
+        for todo in self.todos.get_remaining_todos():
+            d = todo.duedate
+            t = todo.title.ljust(20)
+            if todo.duedate < datetime.now():
+                t = '* ' + t    # ToDoの期限が過ぎていたら*を前につける
+            item = "{} {:4}/{:02}/{:02} {:02}:
+            {:02}".format(t, d.year, d.month, d.day, d.hour, d.minute)
+            self.listbox.insert(END, item)
