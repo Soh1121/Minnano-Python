@@ -78,3 +78,26 @@ class ToDoApp(Frame):
         self.setlistitems()
         self.sel_index = -1
         self.save()
+
+    def refreshitems(self):
+        """
+        タイマーで定期的に呼び出されるメソッド
+        ToDoのうち時間になったものがあればダイアログで知らせる
+        """
+        dirty = False
+        for todo in self.todos.get_remaining_todos():
+            td = datetime.now()
+            d = todo.duedate
+            if (d.year == td.year == td.year and d.month == td.month and d.day == td.day and d.hour == td.hour and d.minute == td.minute):
+                msg = "{}の時間です。\n {}\n {}".format(
+                        todo.title,
+                        todo.description,
+                        todo.duedate.strftime('%Y/%m/%d %H:%M')
+                    )
+                tkinter.messagebox.showwarning("時間です", msg)
+                dirty = True
+        sec = datetime.now().second
+        self.after((60 - sec) * 1000, self.refreshitems)
+
+        if dirty:
+            self.setlistitems()
