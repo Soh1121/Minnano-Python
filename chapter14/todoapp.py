@@ -52,8 +52,7 @@ class ToDoApp(Frame):
             t = todo.title.ljust(20)
             if todo.duedate < datetime.now():
                 t = '* ' + t    # ToDoの期限が過ぎていたら*を前につける
-            item = "{} {:4}/{:02}/{:02} {:02}:
-            {:02}".format(t, d.year, d.month, d.day, d.hour, d.minute)
+            item = "{} {:4}/{:02}/{:02} {:02}:{:02}".format(t, d.year, d.month, d.day, d.hour, d.minute)
             self.listbox.insert(END, item)
     
     def refrectententries(self, todo):
@@ -101,3 +100,20 @@ class ToDoApp(Frame):
 
         if dirty:
             self.setlistitems()
+
+    def load(self):
+        """
+        ToDoのデータをファイルから読み込む
+        """
+        try:
+            f = open(DUMPFILE, 'rb')
+            self.todos = load(f)
+        except IOError:
+            self.todos = ToDoContainer()
+
+    def save(self):
+        """
+        ToDoのデータをファイルに書き出す
+        """
+        f = open(DUMPFILE, 'wb')
+        dump(self.todos, f)
