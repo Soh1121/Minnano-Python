@@ -55,3 +55,26 @@ class ToDoApp(Frame):
             item = "{} {:4}/{:02}/{:02} {:02}:
             {:02}".format(t, d.year, d.month, d.day, d.hour, d.minute)
             self.listbox.insert(END, item)
+    
+    def refrectententries(self, todo):
+        """
+        フィールドに入力された文字列をToDoItemインスタンスに反映する
+        """
+        todo.title = self.title_e.get()
+        todo.description = self.description_e.get()
+        dt = datetime.strptime(self.duedate_e.get() + ':00', '%Y/%m/%d %H:%M:%S')
+        todo.duedate = dt
+        if self.finished_v.get() != 0:
+            todo.finish()
+    
+    def createitem(self):
+        """
+        新しいToDoアイテムを作る
+        """
+        todo = ToDoItem('', '', datetime.now())
+        self.refrectententries(todo)
+        self.todos += todo
+        self.clearentries()
+        self.setlistitems()
+        self.sel_index = -1
+        self.save()
